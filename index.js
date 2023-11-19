@@ -25,13 +25,17 @@ bot.on("message:text", async (ctx) => {
 
   if (platform.name === "unknown") {
     await ctx.replyWithChatAction("typing");
-    return ctx.reply("По данному url адресу загрузка невозможна");
+    return ctx.reply("По данному url адресу загрузка невозможна.");
   }
 
   if (platform.name === "tiktok") {
     await ctx.replyWithChatAction("upload_video");
-    const dataList = await getTikTokMediaUrl(platform.url.href);
-    await ctx.replyWithVideo(dataList[0].sd);
+    try {
+      const dataList = await getTikTokMediaUrl(platform.url.href);
+      await ctx.replyWithVideo(dataList[0].sd);
+    } catch (error) {
+      ctx.reply("Ошибка! По данному url адресу ничего не найдено.");
+    }
   }
 });
 
